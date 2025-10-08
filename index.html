@@ -1,1 +1,426 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local AI MCP Agent - Interactive Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The application is designed as a single-page narrative dashboard. It starts with a high-level summary (Problem/Solution) to quickly orient the user. A sticky navigation bar allows users to jump to thematic sections: an interactive features overview, a clickable multi-layer security diagram, a dynamic SWOT analysis, and a tabbed technical deep-dive. This structure was chosen to cater to different audiences (from managers to developers) by progressively revealing complexity, moving from the 'why' to the 'how' and 'what', making a dense technical document explorable and understandable. -->
+    <!-- Visualization & Content Choices: 1. Core Problem: Inform -> Key-value list -> Static display -> Highlights core business risks clearly. 2. Multi-Layer Security: Organize/Inform -> Interactive HTML/CSS diagram -> Clicking a layer reveals details -> This makes an abstract, critical concept tangible and easy to grasp without complex graphics. Method: HTML/CSS with JS. 3. SWOT Analysis: Compare -> 2x2 Grid with buttons -> Clicking updates a central text area -> Organizes information cleanly and encourages user interaction. Method: HTML/CSS with JS. 4. Cloud vs. Local Trade-offs: Compare -> Radar Chart -> Static visual -> Immediately communicates the core value proposition and trade-offs discussed in the SWOT. Library: Chart.js. 5. Technical Architecture: Organize -> Simple flowchart -> Static display -> Clarifies the system's data flow for technical users. Method: HTML/CSS. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        .active-nav {
+            color: #14b8a6;
+            font-weight: 600;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-teal-600">Local AI MCP Agent</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#problem" class="text-slate-600 hover:text-teal-600 transition duration-300">The Problem</a>
+                <a href="#solution" class="text-slate-600 hover:text-teal-600 transition duration-300">Solution</a>
+                <a href="#features" class="text-slate-600 hover:text-teal-600 transition duration-300">Features</a>
+                <a href="#security" class="text-slate-600 hover:text-teal-600 transition duration-300">Security</a>
+                <a href="#swot" class="text-slate-600 hover:text-teal-600 transition duration-300">Analysis</a>
+                <a href="#tech" class="text-slate-600 hover:text-teal-600 transition duration-300">Technical Deep Dive</a>
+            </div>
+            <div class="md:hidden">
+                <select id="mobile-nav" class="bg-white border border-stone-300 rounded-md p-2 text-slate-700">
+                    <option value="#problem">The Problem</option>
+                    <option value="#solution">Solution</option>
+                    <option value="#features">Features</option>
+                    <option value="#security">Security</option>
+                    <option value="#swot">Analysis</option>
+                    <option value="#tech">Technical Deep Dive</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="problem" class="min-h-[60vh] flex items-center">
+            <div class="w-full">
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-4 tracking-tight">Cloud AI Assistants Pose Unacceptable Risks.</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mb-8">Organizations in regulated industries and privacy-conscious developers cannot use cloud-based AI coding assistants due to critical security and compliance requirements. Transmitting sensitive source code to external servers creates significant vulnerabilities.</p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
+                        <h3 class="font-semibold text-teal-700 mb-2">Intellectual Property Exposure</h3>
+                        <p class="text-sm text-slate-600">Your proprietary code and trade secrets are sent to third-party servers, risking leaks and unauthorized use.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
+                        <h3 class="font-semibold text-teal-700 mb-2">Regulatory Compliance Violations</h3>
+                        <p class="text-sm text-slate-600">Breaches HIPAA, GDPR, SOX, and ITAR by moving regulated data to non-compliant environments.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-stone-200">
+                        <h3 class="font-semibold text-teal-700 mb-2">Data Sovereignty & Vendor Lock-In</h3>
+                        <p class="text-sm text-slate-600">Losing control over where your data resides and becoming dependent on a single provider's ecosystem and recurring costs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="py-20">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">The Solution: A Complete Local AI Assistant</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-10">The Local AI MCP Agent provides a powerful AI coding assistant that operates entirely within your secure, local environment. It offers zero cloud dependencies, ensuring absolute data privacy and control.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h3 class="text-2xl font-semibold text-slate-800 mb-6">Core Project Objectives</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-teal-500 font-bold text-xl mr-4">&#10003;</span>
+                            <div>
+                                <h4 class="font-semibold">Complete Local Operation</h4>
+                                <p class="text-slate-600">Develop a full-featured AI assistant with zero cloud dependencies for 100% offline capability.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-teal-500 font-bold text-xl mr-4">&#10003;</span>
+                            <div>
+                                <h4 class="font-semibold">Multi-Layer Security</h4>
+                                <p class="text-slate-600">Implement a comprehensive, defense-in-depth security architecture.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-teal-500 font-bold text-xl mr-4">&#10003;</span>
+                            <div>
+                                <h4 class="font-semibold">Seamless IDE Integration</h4>
+                                <p class="text-slate-600">Achieve deep and intuitive integration with the VS Code IDE.</p>
+                            </div>
+                        </li>
+                         <li class="flex items-start">
+                            <span class="text-teal-500 font-bold text-xl mr-4">&#10003;</span>
+                            <div>
+                                <h4 class="font-semibold">Standardized Protocol</h4>
+                                <p class="text-slate-600">Utilize the Model Context Protocol (MCP) for extensible and robust tool integration.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md border border-stone-200">
+                    <div class="chart-container">
+                        <canvas id="solutionChart"></canvas>
+                    </div>
+                     <p class="text-center text-sm text-slate-500 mt-2">Comparative Analysis: Local Agent vs. Cloud AI</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="features" class="py-20 bg-white rounded-lg shadow-sm border border-stone-200 -mx-6 px-6">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Core Features & Functionality</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-10">Explore the powerful, secure tools the Local AI MCP Agent puts at your fingertips, all within your local development environment.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-stone-100 p-6 rounded-lg border border-stone-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="font-bold text-lg text-teal-700 mb-2">Secure Local AI Processing</h3>
+                    <p class="text-sm text-slate-600">All AI inference is performed locally using Ollama. Supports multiple models like Qwen and Llama with zero external API calls or data transmission.</p>
+                </div>
+                <div class="bg-stone-100 p-6 rounded-lg border border-stone-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="font-bold text-lg text-teal-700 mb-2">VS Code Integration</h3>
+                    <p class="text-sm text-slate-600">An interactive chat interface and context menu commands (Explain Code, Generate Tests, Refactor) are built directly into the IDE for a seamless workflow.</p>
+                </div>
+                <div class="bg-stone-100 p-6 rounded-lg border border-stone-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="font-bold text-lg text-teal-700 mb-2">Secure Filesystem Operations</h3>
+                    <p class="text-sm text-slate-600">Read, write, and list files and directories with strict path validation that prevents directory traversal attacks, ensuring the AI only accesses project files.</p>
+                </div>
+                <div class="bg-stone-100 p-6 rounded-lg border border-stone-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="font-bold text-lg text-teal-700 mb-2">Controlled Terminal Execution</h3>
+                    <p class="text-sm text-slate-600">Execute allowlisted commands (ls, cat, grep) safely. Dangerous patterns and command chaining are blocked, with a 30-second timeout for protection.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="security" class="py-20">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Interactive Multi-Layer Security Architecture</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-10">Our defense-in-depth strategy provides robust protection at every level. Click on a layer below to learn how it contributes to the agent's security and achieves 100% attack mitigation for known vectors.</p>
+            </div>
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="w-full md:w-1/3 flex flex-col space-y-2">
+                    <button data-layer="1" class="security-layer-btn text-left p-4 rounded-lg border-2 border-teal-500 bg-teal-50 shadow-md">
+                        <span class="font-bold">Layer 1:</span> Docker Container Isolation
+                    </button>
+                    <button data-layer="2" class="security-layer-btn text-left p-4 rounded-lg border border-stone-300 bg-white hover:border-teal-400 transition-colors">
+                        <span class="font-bold">Layer 2:</span> Non-Root User & Privileges
+                    </button>
+                    <button data-layer="3" class="security-layer-btn text-left p-4 rounded-lg border border-stone-300 bg-white hover:border-teal-400 transition-colors">
+                        <span class="font-bold">Layer 3:</span> Input Validation
+                    </button>
+                    <button data-layer="4" class="security-layer-btn text-left p-4 rounded-lg border border-stone-300 bg-white hover:border-teal-400 transition-colors">
+                        <span class="font-bold">Layer 4:</span> Execution Controls
+                    </button>
+                    <button data-layer="5" class="security-layer-btn text-left p-4 rounded-lg border border-stone-300 bg-white hover:border-teal-400 transition-colors">
+                        <span class="font-bold">Layer 5:</span> Audit Logging
+                    </button>
+                </div>
+                <div class="w-full md:w-2/3 bg-white p-8 rounded-lg shadow-md border border-stone-200 min-h-[250px]">
+                    <div id="security-details">
+                        <h3 id="security-title" class="text-xl font-bold text-teal-700 mb-3">Layer 1: Docker Container Isolation</h3>
+                        <p id="security-desc" class="text-slate-600">The entire agent and its tools run inside isolated Docker containers. This creates a secure sandbox, preventing the AI or any executed command from accessing the host operating system or files outside the designated workspace volume. It's the first and strongest line of defense.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="swot" class="py-20">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">SWOT Analysis</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-10">An honest appraisal of the project's position. Select a category to see the detailed analysis of its internal strengths and weaknesses, and external opportunities and threats.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <button data-swot="strengths" class="swot-btn p-4 rounded-lg bg-teal-600 text-white font-semibold shadow-md hover:bg-teal-700 transition">Strengths</button>
+                <button data-swot="weaknesses" class="swot-btn p-4 rounded-lg bg-white text-slate-700 font-semibold shadow-md hover:bg-stone-100 transition border">Weaknesses</button>
+                <button data-swot="opportunities" class="swot-btn p-4 rounded-lg bg-white text-slate-700 font-semibold shadow-md hover:bg-stone-100 transition border">Opportunities</button>
+                <button data-swot="threats" class="swot-btn p-4 rounded-lg bg-white text-slate-700 font-semibold shadow-md hover:bg-stone-100 transition border">Threats</button>
+            </div>
+            <div class="bg-white p-8 rounded-lg shadow-md border border-stone-200 min-h-[300px]">
+                <h3 id="swot-title" class="text-2xl font-bold text-teal-700 mb-4">Strengths</h3>
+                <ul id="swot-list" class="list-disc list-inside text-slate-600 space-y-2">
+                </ul>
+            </div>
+        </section>
+
+        <section id="tech" class="py-20">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Technical Deep Dive</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-10">For those interested in the underlying technology, this section covers the system architecture, protocols, and core algorithms that power the agent.</p>
+            </div>
+            <div class="flex justify-center mb-8 border-b border-stone-200">
+                <button data-tech="architecture" class="tech-tab-btn py-2 px-6 font-semibold border-b-2 border-teal-500 text-teal-600">Architecture</button>
+                <button data-tech="protocols" class="tech-tab-btn py-2 px-6 font-semibold text-slate-500 border-b-2 border-transparent hover:border-stone-300 hover:text-slate-700 transition">Protocols</button>
+                <button data-tech="algorithms" class="tech-tab-btn py-2 px-6 font-semibold text-slate-500 border-b-2 border-transparent hover:border-stone-300 hover:text-slate-700 transition">Algorithms</button>
+            </div>
+            <div id="tech-content" class="bg-white p-8 rounded-lg shadow-md border border-stone-200">
+            </div>
+        </section>
+
+    </main>
+    <footer class="text-center py-8 border-t border-stone-200">
+        <p class="text-sm text-slate-500">Interactive Report generated for Local AI MCP Agent SRS.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const securityData = {
+                '1': { title: 'Layer 1: Docker Container Isolation', desc: 'The entire agent and its tools run inside isolated Docker containers. This creates a secure sandbox, preventing the AI or any executed command from accessing the host operating system or files outside the designated workspace volume. It is the first and strongest line of defense.' },
+                '2': { title: 'Layer 2: Non-Root User & Privileges', desc: 'Within the container, all processes run as a non-root user with minimal privileges. We use capability dropping (CAP_DROP: ALL) and no-new-privileges flags to ensure that even if a process is compromised, it cannot escalate its permissions within the container.' },
+                '3': { title: 'Layer 3: Input Validation', desc: 'All inputs from the AI model are rigorously validated before execution. File paths are checked to prevent directory traversal (".."), and commands are checked against a strict allowlist and a blocklist of dangerous patterns (e.g., ";", "&&", "$()").' },
+                '4': { title: 'Layer 4: Execution Controls', desc: 'Executed commands are subject to strict controls. A 30-second timeout prevents long-running or hung processes from consuming system resources. Processes are managed in groups to ensure all child processes are properly terminated.' },
+                '5': { title: 'Layer 5: Audit Logging', desc: 'Every security-sensitive action, such as file access or command execution, is recorded in a structured, append-only audit log. This provides a complete trail for security analysis and debugging, ensuring accountability for all operations.' }
+            };
+
+            const swotData = {
+                strengths: ['Complete Privacy: Zero external data transmission ensures absolute data control.', 'Multi-Layer Security: Defense-in-depth architecture with 100% attack mitigation.', 'Cost-Effective: No recurring subscriptions, one-time hardware investment.', 'Compliance-Ready: GDPR, HIPAA, SOX, ITAR compatible out-of-box.', 'Open Source: Apache 2.0 license enables inspection and customization.', 'MCP Protocol: Standardized and extensible tool integration.'],
+                weaknesses: ['Model Quality: Local 7B models are not as sophisticated as cloud-based GPT-4.', 'Hardware Requirements: Needs 16GB RAM and a modern CPU for optimal performance.', 'Setup Complexity: Docker and Ollama installation requires technical knowledge.', 'Response Speed: 5-10s responses are slower than 1-2s cloud services.'],
+                opportunities: ['Growing Privacy Awareness: Increasing demand for local-first tools due to data breaches.', 'Regulatory Expansion: More countries implementing data residency laws.', 'Enterprise Adoption: Regulated industries actively seeking compliant AI solutions.', 'MCP Ecosystem: Growth of the MCP standard creates a larger tool ecosystem.', 'Edge AI Trend: Industry movement toward edge computing aligns with the local approach.'],
+                threats: ['Cloud AI Improvements: GPT-5, Claude 4 may widen the quality gap.', 'Hardware Evolution: Rapid changes may require frequent optimization.', 'Competing Solutions: Other local-first solutions are improving their capabilities.', 'Model License Changes: Open models could become more restricted in the future.']
+            };
+
+            const techData = {
+                architecture: `
+                    <h3 class="text-xl font-bold text-teal-700 mb-4">Process Architecture Flow</h3>
+                    <p class="text-slate-600 mb-6">The system is designed with a clear separation of concerns, using well-defined interfaces for communication between components. This architecture ensures security and modularity.</p>
+                    <div class="space-y-4 text-center">
+                        <div class="bg-stone-100 p-4 rounded-lg border border-stone-200 shadow-sm">
+                            <p class="font-semibold">VS Code Extension (TypeScript)</p>
+                            <p class="text-sm text-slate-500">User Interface and Editor Interaction</p>
+                        </div>
+                        <div class="font-bold text-2xl text-slate-400">&darr;</div>
+                        <p class="text-sm font-semibold text-slate-500 -my-2">HTTP Request</p>
+                        <div class="bg-stone-100 p-4 rounded-lg border border-stone-200 shadow-sm">
+                            <p class="font-semibold">Python Bridge (FastMCP)</p>
+                            <p class="text-sm text-slate-500">Receives UI requests, orchestrates AI and tools</p>
+                        </div>
+                        <div class="font-bold text-2xl text-slate-400">&darr;</div>
+                        <p class="text-sm font-semibold text-slate-500 -my-2">stdio (JSON-RPC / MCP)</p>
+                        <div class="bg-teal-50 p-4 rounded-lg border border-teal-200 shadow-sm">
+                            <p class="font-semibold">MCP Servers (in Docker Containers)</p>
+                            <p class="text-sm text-slate-500">Isolated Filesystem & Terminal Execution</p>
+                        </div>
+                    </div>
+                `,
+                protocols: `
+                    <h3 class="text-xl font-bold text-teal-700 mb-4">Key Communication Protocols</h3>
+                    <ul class="space-y-4">
+                        <li><strong class="font-semibold">Model Context Protocol (MCP):</strong> A standardized protocol based on JSON-RPC 2.0, used for communication between the Python bridge and the tool servers (filesystem, terminal) over stdio.</li>
+                        <li><strong class="font-semibold">JSON-RPC 2.0:</strong> A lightweight remote procedure call protocol that defines the structure for requests and responses, ensuring reliable communication.</li>
+                        <li><strong class="font-semibold">HTTP/REST:</strong> Used for communication between the Python bridge and the local Ollama AI model server for chat completions.</li>
+                        <li><strong class="font-semibold">Docker Network Protocol:</strong> A custom bridge network isolates the MCP server containers, allowing them to communicate with each other but limiting external access.</li>
+                    </ul>
+                `,
+                algorithms: `
+                    <h3 class="text-xl font-bold text-teal-700 mb-4">Core Validation Algorithms</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-slate-800">1. Path Validation Algorithm</h4>
+                            <p class="text-sm text-slate-600 mb-2">Ensures file paths provided by the AI are safe and within project boundaries.</p>
+                            <ol class="list-decimal list-inside text-sm text-slate-600 space-y-1">
+                                <li>Resolve path to an absolute path relative to the workspace.</li>
+                                <li>Check if the path is still within the workspace directory.</li>
+                                <li>Explicitly check for and reject any path containing '..' (directory traversal).</li>
+                                <li>Raise a SecurityError if any check fails.</li>
+                            </ol>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-slate-800">2. Command Validation Algorithm</h4>
+                            <p class="text-sm text-slate-600 mb-2">Ensures commands suggested by the AI are safe to execute.</p>
+                             <ol class="list-decimal list-inside text-sm text-slate-600 space-y-1">
+                                <li>Check if the base command exists in a pre-approved allowlist (e.g., 'ls', 'cat').</li>
+                                <li>Scan the command for dangerous patterns or operators (e.g., ';', '&&', '||', '$()').</li>
+                                <li>Raise a SecurityError if the command is not allowed or contains dangerous patterns.</li>
+                            </ol>
+                        </div>
+                    </div>
+                `
+            };
+            
+            const securityLayerBtns = document.querySelectorAll('.security-layer-btn');
+            const securityTitle = document.getElementById('security-title');
+            const securityDesc = document.getElementById('security-desc');
+            securityLayerBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const layer = btn.dataset.layer;
+                    securityLayerBtns.forEach(b => {
+                        b.classList.remove('border-teal-500', 'bg-teal-50', 'shadow-md', 'border-2');
+                        b.classList.add('border-stone-300', 'bg-white');
+                    });
+                    btn.classList.add('border-teal-500', 'bg-teal-50', 'shadow-md', 'border-2');
+                    btn.classList.remove('border-stone-300', 'bg-white');
+                    securityTitle.textContent = securityData[layer].title;
+                    securityDesc.textContent = securityData[layer].desc;
+                });
+            });
+
+            const swotBtns = document.querySelectorAll('.swot-btn');
+            const swotTitle = document.getElementById('swot-title');
+            const swotList = document.getElementById('swot-list');
+
+            function updateSwotContent(type) {
+                swotTitle.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+                swotList.innerHTML = swotData[type].map(item => `<li>${item}</li>`).join('');
+                 swotBtns.forEach(b => {
+                    b.classList.remove('bg-teal-600', 'text-white');
+                    b.classList.add('bg-white', 'text-slate-700', 'border');
+                });
+                const activeBtn = document.querySelector(`.swot-btn[data-swot="${type}"]`);
+                activeBtn.classList.add('bg-teal-600', 'text-white');
+                activeBtn.classList.remove('bg-white', 'text-slate-700', 'border');
+            }
+
+            swotBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const type = btn.dataset.swot;
+                    updateSwotContent(type);
+                });
+            });
+
+            const techTabBtns = document.querySelectorAll('.tech-tab-btn');
+            const techContent = document.getElementById('tech-content');
+            
+            function updateTechContent(type) {
+                 techContent.innerHTML = techData[type];
+                 techTabBtns.forEach(b => {
+                    b.classList.remove('border-teal-500', 'text-teal-600');
+                    b.classList.add('text-slate-500', 'border-transparent');
+                });
+                const activeBtn = document.querySelector(`.tech-tab-btn[data-tech="${type}"]`);
+                activeBtn.classList.add('border-teal-500', 'text-teal-600');
+                activeBtn.classList.remove('text-slate-500', 'border-transparent');
+            }
+
+            techTabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const type = btn.dataset.tech;
+                    updateTechContent(type);
+                });
+            });
+
+            updateSwotContent('strengths');
+            updateTechContent('architecture');
+            
+            const mobileNav = document.getElementById('mobile-nav');
+            mobileNav.addEventListener('change', (e) => {
+                const targetId = e.target.value;
+                document.querySelector(targetId).scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            const ctx = document.getElementById('solutionChart').getContext('2d');
+            const solutionChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Security', 'Privacy', 'Compliance', 'Performance', 'Upfront Cost', 'Model Quality'],
+                    datasets: [{
+                        label: 'Local AI MCP Agent',
+                        data: [9, 10, 9, 5, 7, 6],
+                        backgroundColor: 'rgba(20, 184, 166, 0.2)',
+                        borderColor: 'rgba(13, 148, 136, 1)',
+                        pointBackgroundColor: 'rgba(13, 148, 136, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(13, 148, 136, 1)'
+                    }, {
+                        label: 'Cloud AI Assistants',
+                        data: [4, 2, 3, 9, 2, 9],
+                        backgroundColor: 'rgba(100, 116, 139, 0.2)',
+                        borderColor: 'rgba(51, 65, 85, 1)',
+                        pointBackgroundColor: 'rgba(51, 65, 85, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(51, 65, 85, 1)'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: { font: { size: 12 } },
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            ticks: {
+                                backdropColor: 'rgba(255, 255, 255, 0.75)',
+                                stepSize: 2
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
 
